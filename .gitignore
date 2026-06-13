@@ -1,0 +1,42 @@
+# ── Secrets & environment variables ──────────────────────────────────────────
+.env
+.env.*
+.env.local
+.env.*.local
+*.pem
+*.key
+*.p12
+*.pfx
+*.cer
+secrets/
+credentials/
+**/secrets.*
+**/credentials.*
+
+# ── OS artefacts ─────────────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ── Editor / IDE ──────────────────────────────────────────────────────────────
+.idea/
+*.suo
+*.user
+*.swp
+*~
+
+# ── Spec-kit runtime state (auto-generated, not source) ──────────────────────
+.specify/feature.json
+
+# ── Dependency directories ────────────────────────────────────────────────────
+node_modules/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# ── Build output ──────────────────────────────────────────────────────────────
+dist/
+build/
+out/
+*.log
