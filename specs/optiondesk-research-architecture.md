@@ -2,7 +2,7 @@
 
 **Feature Branch**: `research-architecture-v1`
 **Created**: 2026-06-14
-**Status**: Draft — אושר בסשן clarify
+**Status**: Clarify ✅ · Initial Audit ✅ · Plan ⏳
 **Meeting Deadline**: ~2026-07-05 (פגישה עם סגן מנהל הסקטור — 3 שבועות)
 
 ---
