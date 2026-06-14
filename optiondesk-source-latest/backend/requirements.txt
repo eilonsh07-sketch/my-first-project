@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+pydantic
+numpy
+pandas
+scipy
+certifi
+python-dotenv
+anthropic
+psycopg[binary]
