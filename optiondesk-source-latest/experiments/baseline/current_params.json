@@ -1,0 +1,158 @@
+{
+  "_meta": {
+    "version": "hypothesis-v1",
+    "date_documented": "2026-06-14",
+    "status": "HYPOTHESIS — not scientifically validated",
+    "note": "Parameters set heuristically. Treat as null hypothesis. Experimental Researcher will test and propose replacements. Every number here is a candidate for change.",
+    "validated_by": null,
+    "validation_date": null
+  },
+  "risk_free_rate": {
+    "value": 0.045,
+    "rationale": "Approximation of US 10yr Treasury yield. Not dynamically updated.",
+    "hypothesis": "Should be dynamically fetched and used. Impact on BS pricing unknown."
+  },
+  "hard_filters": {
+    "min_premium": {
+      "value": 0.10,
+      "rationale": "Anti-lottery-ticket filter",
+      "hypothesis": "Optimal threshold unknown. Too low = gambling, too high = miss OTM opportunities."
+    },
+    "max_otm_pct": {
+      "value": 0.40,
+      "rationale": "Block far-OTM options",
+      "hypothesis": "40% may be too wide. Research suggests 15-25% OTM is the practical ceiling."
+    },
+    "max_dte": {
+      "value": 183,
+      "rationale": "6-month horizon cap",
+      "hypothesis": "Unknown if 183 is optimal. LEAPS research suggests 12-24 months may have structural edge."
+    },
+    "max_sigma_move": {
+      "value": 2.5,
+      "rationale": "Reject options requiring >2.5 std-dev move",
+      "hypothesis": "Optimal threshold unknown. May be too permissive."
+    },
+    "min_valid_iv": {
+      "value": 0.05,
+      "rationale": "Yahoo IV below this is broken data",
+      "hypothesis": "Data quality filter — likely correct."
+    }
+  },
+  "option_score_weights": {
+    "_total": 100,
+    "_note": "Sum must equal 100. These weights are the PRIMARY scientific hypothesis to test.",
+    "ev_normalized_by_premium": {
+      "weight": 35,
+      "rationale": "Expected value is the core edge — should lead",
+      "hypothesis": "May be too high or too low. Academic literature on Kelly/EV suggests dominance is justified."
+    },
+    "prob_of_profit": {
+      "weight": 20,
+      "rationale": "POP capped to prevent deep-ITM bias",
+      "hypothesis": "The 20 cap is arbitrary. POP vs EV relative weighting is untested."
+    },
+    "iv_rank": {
+      "weight": 15,
+      "rationale": "Low IV rank = cheap vol = buyer's edge",
+      "hypothesis": "Reduced from 20 to 15 to reduce double-counting with iv_vs_rv. Cut was heuristic not empirical."
+    },
+    "iv_vs_rv": {
+      "weight": 10,
+      "rationale": "Option not overpriced vs realized vol",
+      "hypothesis": "10pt weight arbitrary. IV/RV ratio threshold and nonlinearity unvalidated."
+    },
+    "liquidity": {
+      "weight": 12,
+      "rationale": "Executable spread + OI + volume",
+      "hypothesis": "12pts may be appropriate for a single-user tool. Sub-weights (0.5/0.3/0.2) arbitrary."
+    },
+    "reachability_sigma_move": {
+      "weight": 8,
+      "rationale": "How many std-devs to breakeven",
+      "hypothesis": "Smallest weight. Partially redundant with max_otm_pct filter and max_sigma_move hard filter."
+    }
+  },
+  "liquidity_sub_weights": {
+    "bid_ask_spread": 0.50,
+    "open_interest": 0.30,
+    "volume": 0.20,
+    "thresholds": {
+      "max_spread_for_full_score_pct": 0.25,
+      "min_oi_for_full_score": 500,
+      "min_volume_for_full_score": 100
+    }
+  },
+  "momentum_score_weights": {
+    "_total_nominal": 100,
+    "_note": "Moving averages dominate. All weights are heuristic.",
+    "moving_averages_4ma": {
+      "total": 30,
+      "per_ma": 7.5,
+      "mas_used": ["MA20", "MA50", "MA150", "MA200"],
+      "hypothesis": "Equal weighting of 4 MAs is arbitrary. MA200 is most cited in literature for trend-following."
+    },
+    "macd_bullish": {
+      "value": 15,
+      "hypothesis": "Binary 0/15 — no gradation. MACD signal strength not captured."
+    },
+    "rsi_sweet_spot_45_70": {
+      "value": 15,
+      "hypothesis": "RSI 45-70 sweet spot is the most contested number in this model."
+    },
+    "relative_strength_vs_spx": {
+      "value": 15,
+      "hypothesis": "Likely important. Academic Momentum literature supports this factor strongly."
+    },
+    "obv_trend_up": {
+      "value": 7,
+      "hypothesis": "Volume-price divergence. Modest weight seems reasonable."
+    },
+    "above_vwap": {
+      "value": 3,
+      "hypothesis": "Very small weight. VWAP is an intraday concept applied to daily data."
+    },
+    "bullish_chart_patterns": {
+      "value": 5,
+      "hypothesis": "Pattern recognition is subjective and poorly backtested."
+    },
+    "overextended_penalty": {
+      "value": -5,
+      "hypothesis": "Arbitrary penalty. Definition of overextended not rigorous."
+    },
+    "adx_bonus_penalty": {
+      "max": 6,
+      "hypothesis": "ADX threshold of 25 for strong trend — standard but unvalidated in this context."
+    },
+    "ichimoku_bonus_penalty": {
+      "max": 5,
+      "hypothesis": "Ichimoku cloud position. Small weight, low confidence."
+    },
+    "stochastic_bonus_penalty": {
+      "max": 3,
+      "hypothesis": "Smallest indicator. Likely noise at this weight."
+    }
+  },
+  "final_verdict_weights": {
+    "option_score_weight": 0.60,
+    "momentum_score_weight": 0.40,
+    "backtest": {
+      "treatment": "multiplier_not_additive",
+      "min_multiplier": 0.85,
+      "max_multiplier": 1.10,
+      "neutral_score": 50,
+      "formula": "0.85 + (backtest_score / 100) * 0.25",
+      "hypothesis": "The 60/40 split is the most critical number to test. No empirical basis for this ratio."
+    }
+  },
+  "fundamental_risk_multipliers": {
+    "altman_z_distress": 0.90,
+    "altman_z_grey_zone": 0.96,
+    "cash_burn_high_leverage": 0.95,
+    "hypothesis": "Downside-only multipliers. Calibration is heuristic."
+  },
+  "earnings_haircut": {
+    "value": 0.93,
+    "hypothesis": "7% penalty when earnings fall before expiry. Arbitrary."
+  }
+}

@@ -1,0 +1,19 @@
+# Render.com blueprint — one-click deploy of the OptionDesk backend.
+# In Render: New + → Blueprint → connect the GitHub repo → it reads this file.
+services:
+  - type: web
+    name: optiondesk-backend
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /api/health
+    envVars:
+      # Set this in the Render dashboard after creating a Postgres instance.
+      # If omitted, the app falls back to ephemeral SQLite (watchlist won't persist).
+      - key: DATABASE_URL
+        sync: false
+      # CORS: comma-separated list of allowed frontend origins.
+      # Set to your Vercel URL, e.g. https://optiondesk.vercel.app
+      - key: ALLOWED_ORIGINS
+        sync: false

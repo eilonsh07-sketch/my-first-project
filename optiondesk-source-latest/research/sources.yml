@@ -1,0 +1,73 @@
+# מאגר מקורות המחקר — OptionDesk Literature Researcher
+# כל מקור שנוסף כאן עשוי להיות מעובד אוטומטית.
+# status: pending | processed | skipped
+
+sources:
+  books:
+    - id: natenberg-ovap
+      title: "Option Volatility and Pricing"
+      author: "Sheldon Natenberg"
+      edition: "2nd"
+      status: pending
+      priority: high
+      topics: ["IV pricing", "Greeks", "volatility strategies"]
+      notes: "הספר הסטנדרטי לתמחור אופציות. רלוונטי במיוחד לפרקים על IV rank ו-EV."
+
+    - id: hull-options-futures
+      title: "Options, Futures, and Other Derivatives"
+      author: "John C. Hull"
+      edition: "11th"
+      status: pending
+      priority: high
+      topics: ["BS model", "Greeks", "risk-neutral pricing", "American options"]
+      notes: "הספר האקדמי הסטנדרטי. רלוונטי לתמחור אמריקאי ולפרמטר risk-free rate."
+
+    - id: taleb-dynamic-hedging
+      title: "Dynamic Hedging"
+      author: "Nassim Nicholas Taleb"
+      status: pending
+      priority: medium
+      topics: ["vega risk", "tail risk", "vol of vol"]
+      notes: "נקודת מבט ייחודית על tail risk — חשוב לבדיקת פרמטר OTM max."
+
+    - id: mcmillan-options
+      title: "Options as a Strategic Investment"
+      author: "Lawrence G. McMillan"
+      edition: "5th"
+      status: pending
+      priority: medium
+      topics: ["strategy selection", "market conditions", "seasonality"]
+
+  papers:
+    - id: cboe-vix-methodology
+      url: "https://cdn.cboe.com/api/global/us_indices/governance/VIX_Methodology.pdf"
+      title: "VIX Methodology"
+      source: "CBOE"
+      status: pending
+      priority: high
+      topics: ["IV measurement", "VIX construction", "fear index"]
+
+    - id: carr-wu-variance-risk
+      url: "https://arxiv.org/abs/2306.01174"
+      title: "Variance Risk Premiums"
+      author: "Carr, Wu"
+      status: pending
+      priority: high
+      topics: ["VRP", "options overpricing", "seller edge"]
+      notes: "קריטי — מוכיח שמוכרי אופציות מרוויחים ב-VRP. רלוונטי לניקוד IV rank."
+
+    - id: jegadeesh-titman-momentum
+      title: "Returns to Buying Winners and Selling Losers"
+      author: "Jegadeesh, Titman (1993)"
+      source: "Journal of Finance"
+      status: pending
+      priority: high
+      topics: ["momentum factor", "12-1 month momentum", "relative strength"]
+      notes: "הבסיס האקדמי למשקל המומנטום (40%). רלוונטי ישירות."
+
+    - id: delta-hedging-options
+      url: "https://arxiv.org/abs/2102.05942"
+      title: "Delta Hedging and Option Returns"
+      status: pending
+      priority: medium
+      topics: ["option returns", "EV", "hedging costs"]

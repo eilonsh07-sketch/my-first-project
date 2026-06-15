@@ -1,0 +1,25 @@
+# Secrets — NEVER commit these
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.crt
+secrets.json
+credentials.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+*.db
+
+# Node / frontend
+node_modules/
+dist/
+.vite/
+
+# OS / editor
+.DS_Store
+*.log
