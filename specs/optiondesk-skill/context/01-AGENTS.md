@@ -54,3 +54,15 @@ User → ATLAS
 3. SIGMA רץ רק אחרי KEYNES (צריך regime)
 4. MAX רץ רק על האסטרטגיה שSIGMA בחר (לא על כולן)
 5. CANVAS תמיד אחרון
+
+## MAX Gate — כלל integrity מרכזי
+**שום ציון מספרי וסבירות לא מגיע ל-UI לפני שעבר דרך MAX.**
+
+| מה מוצג למשתמש | מקור מאושר | מה אסור |
+|----------------|-----------|---------|
+| ציון אסטרטגיה (85/100) | `MAX.final_score` — מחושב מ-`scoring.py`, מאומת out-of-sample | לא `scoring.py` גולמי ללא MAX validation |
+| Win-rate (68%) | `MAX.win_rate` מ-backtest.py — ALPHA+BETA הסכימו (diff < 10%) | לא אומדן מ-SIGMA/LENS בלבד |
+| Confidence (0.73) | `min(LENS_raw, MAX.confidence)` — LENS לא יכול לטעון יותר ממה שMAX הוכיח | לא LENS.confidence ישיר |
+| תרחישי תשואה | `scenarios.py` מחדש (US, מאומת) — לא גרסה הישראלית הישנה | לא scenarios.py הישן (F1 חייב לרוץ קודם) |
+
+CLARITY מסבירה מספרים ש-MAX הוכיח — היא **אינה** יוצרת ציונים חדשים.
