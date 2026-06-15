@@ -39,24 +39,63 @@ Every score and probability shown to the user MUST be backed by evidence that MA
 
 ## What to Build
 
-A tool that helps an investment advisor evaluate options trades on US securities. Capabilities include:
+A **multi-agent decision-support system** for US options analysis. The architecture is 13 specialized agents orchestrated by a CEO agent (ATLAS), each with a defined role, a typed input/output contract, and a clear position in the pipeline.
 
-- Options chain data display and filtering
-- Greeks (delta, gamma, theta, vega) visualization
-- Implied volatility analysis
-- Risk/reward scenario modeling with numerical scores and probabilities
-- Market data integration (real-time or delayed)
-- Trade idea comparison, ranking, and morning scan
-- 10-slide presentation output (CANVAS)
+### Architecture: 13 Agents in 4 Layers
 
-All outputs must be framed as data and analysis for the advisor to interpret — not as buy/sell recommendations.
+| Layer | Agents | Role |
+|-------|--------|------|
+| 0 — Infrastructure | ATLAS, VERIFY | ATLAS orchestrates; VERIFY gates data quality before any analysis |
+| 1 — Data & Macro | KEYNES, MIKI, RADAR | Macro regime (VIX/yield curve/VRP), academic research, earnings/FOMC calendar |
+| 2 — Quant Core | MAX, SIGMA, LENS | MAX validates all scores out-of-sample; SIGMA selects strategies by regime; LENS provides technical signals bounded by MAX confidence |
+| 3 — Risk & Suitability | GUARDIAN, COMPASS, SCOUT | Kelly-based position sizing; client risk-profile filtering; competitive context vs. Bloomberg/ORATS |
+| 4 — Output | CLARITY, CANVAS | 3-layer explanations (advisor/client/regulator); 10-slide Hebrew RTL presentation |
 
-## Tech Decisions (To Be Made)
+### Shared Persistent Context
 
-- Data provider (e.g. Polygon.io, Tradier, CBOE, Yahoo Finance)
-- Frontend framework
-- Backend / API layer
-- Hosting / deployment target
+All agents read from a shared context directory (`specs/optiondesk-skill/context/`), backed by GitHub. No copy-pasting between sessions — any agent invoked via `/optiondesk` has immediate access to the full project state, all contracts, and the live build checklist (`BUILD_STATUS.md`).
+
+### Two Usage Modes
+
+**1. On-demand analysis** — advisor enters a ticker + client risk profile:
+```
+/optiondesk atlas ticker=AAPL profile=moderate
+```
+Full pipeline: VERIFY → KEYNES+RADAR+MIKI (parallel) → SIGMA → MAX → GUARDIAN → LENS → COMPASS → SCOUT → CLARITY → CANVAS
+
+**2. Morning scan** — ATLAS scans a watchlist and returns a ranked list of trade ideas for the day, each with a MAX-validated score.
+
+### What the Output Contains
+
+Every analysis package produced by ATLAS includes:
+- Strategy recommendation with a numerical score (e.g. 85/100) — computed by `scoring.py`, validated out-of-sample by MAX
+- Win-rate and confidence — from MAX backtest (ALPHA + BETA validators must agree, diff < 10%)
+- Return scenarios: best / base / worst case with dollar amounts
+- Risk assessment: Kelly-sized position, max drawdown, Greeks exposure
+- Client suitability note (COMPASS filter)
+- 10-slide CANVAS presentation in Hebrew RTL, exportable to PDF
+- Mandatory disclaimer on every output
+
+### What Is Not Built
+
+- No trade execution, no order routing, no automation
+- No buy/sell recommendations — all framing is "data and analysis for advisor judgment"
+- No scores displayed without MAX validation (the MAX Gate rule)
+
+## Tech Stack (Decided)
+
+| Component | Technology |
+|-----------|-----------|
+| Backend | Python 3.12, FastAPI, uvicorn |
+| Frontend | React 18 + Vite + Tailwind CSS |
+| Data (primary) | Polygon.io |
+| Data (fallback) | yfinance |
+| Risk-free rate | FRED DTB3 API — dynamic, TTL 1h (no hardcoded 0.045) |
+| AI / LLM | Claude API — Haiku model (CLARITY explanations, MIKI/SCOUT research) |
+| Presentation | Jinja2 + WeasyPrint → HTML/PDF (CANVAS) |
+| Storage | SQLite (local) / Postgres (production via `DATABASE_URL`) |
+| Deployment | Render (backend) / Vercel (frontend) |
+| Version control | GitHub — `https://github.com/eilonsh07-sketch/my-first-project` |
 
 ## Spec-kit Workflow
 
